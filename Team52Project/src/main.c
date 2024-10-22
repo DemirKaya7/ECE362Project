@@ -35,14 +35,14 @@ void setup_tim3(void) {
     GPIOB->MODER |= GPIO_MODER_MODER5_1;
 
     // specify AF1
-    GPIOC->AFR[0] |= (1 << GPIO_AFRL_AFRL0_Pos);
-    GPIOD->AFR[0] |= (1 << GPIO_AFRL_AFRL1_Pos);
-    GPIOC->AFR[0] |= (1 << GPIO_AFRL_AFRL4_Pos);
-    GPIOD->AFR[0] |= (1 << GPIO_AFRL_AFRL5_Pos);
+    GPIOB->AFR[0] |= (1 << GPIO_AFRL_AFRL0_Pos);
+    GPIOB->AFR[0] |= (1 << GPIO_AFRL_AFRL1_Pos);
+    GPIOB->AFR[0] |= (1 << GPIO_AFRL_AFRL4_Pos);
+    GPIOB->AFR[0] |= (1 << GPIO_AFRL_AFRL5_Pos);
 
     // set for frequency of 48000 KHz
-    TIM3->PSC = 48000 - 1;
-    TIM3->ARR = 999;
+    TIM3->PSC = 4800 - 1;
+    TIM3->ARR = 10000 - 1;
 
     // enable PWM mode 1 and enable timer
     TIM3->CCMR1 |= (TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_2);
@@ -55,10 +55,10 @@ void setup_tim3(void) {
     TIM3->CCER |= TIM_CCER_CC4E;
     TIM3->CR1 |= TIM_CR1_CEN;
     // set CCR
-    TIM3->CCR1 = 800;
-    TIM3->CCR2 = 400;
-    TIM3->CCR3 = 200;
-    TIM3->CCR4 = 100;
+    TIM3->CCR1 = 5000;
+    TIM3->CCR2 = 5000;
+    TIM3->CCR3 = 5000;
+    TIM3->CCR4 = 5000;
 }
 
 
