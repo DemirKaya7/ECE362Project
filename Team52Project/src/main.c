@@ -1,5 +1,9 @@
 #include "stm32f0xx.h"
 #include <math.h>
+#include <stdio.h>
+
+extern void autotest();
+extern void internal_clock();
 
 void setup_tim3(void) {
     RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
@@ -45,8 +49,10 @@ void setup_tim3(void) {
 
 
 int main(void) {
-    printf("\nstart\n");
+    internal_clock();
+    autotest();
+    sprintf(stdout, "\nstart\n");
     setup_tim3();
-    printf("\nsuccess\n");
+    sprintf(stdout, "\nsuccess\n");
 }
 
