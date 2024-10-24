@@ -43,6 +43,7 @@ void setup_tim3(void) {
     TIM3->CCMR1 |= (TIM_CCMR1_OC2M_1 | TIM_CCMR1_OC2M_2);
     TIM3->CCMR2 |= (TIM_CCMR2_OC3M_1 | TIM_CCMR2_OC3M_2);
     TIM3->CCMR2 |= (TIM_CCMR2_OC4M_1 | TIM_CCMR2_OC4M_2);
+
     TIM3->CCER |= TIM_CCER_CC1E;
     TIM3->CCER |= TIM_CCER_CC2E;
     TIM3->CCER |= TIM_CCER_CC3E;
@@ -52,10 +53,53 @@ void setup_tim3(void) {
 
     // set CCR
     
-    TIM3->CCR1 = 250;
-    TIM3->CCR2 = 500;
-    TIM3->CCR3 = 750;
-    TIM3->CCR4 = 1000;
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    int l = 0;
+
+    int loopVal = 1000000;
+
+//100000 loop value works
+    while(1)
+    {
+        for(i = 0; i< loopVal; i++)
+        {
+            TIM3->CCR1 = 1000;
+            TIM3->CCR2 = 0;
+            TIM3->CCR3 = 0;
+            TIM3->CCR3 = 0;
+        }
+        i = 0;
+
+        for(j = 0; j< loopVal; j++)
+        {
+            TIM3->CCR1 = 0;
+            TIM3->CCR2 = 1000;
+            TIM3->CCR3 = 0;
+            TIM3->CCR3 = 0;
+        }
+        j = 0;
+
+        for(k = 0; k< loopVal; k++)
+        {
+            TIM3->CCR1 = 0;
+            TIM3->CCR2 = 0;
+            TIM3->CCR3 = 1000;
+            TIM3->CCR3 = 0;
+        }
+        k = 0;
+
+        for(l = 0; l< loopVal; l++)
+        {
+            TIM3->CCR1 = 0;
+            TIM3->CCR2 = 0;
+            TIM3->CCR3 = 0;
+            TIM3->CCR3 = 1000;
+        }
+        l = 0;
+    }
+    
     
 
     /*
