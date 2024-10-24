@@ -24,7 +24,7 @@ void setup_tim3(void) {
     RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
     RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
 
-    // enable pb[0, 1, 4, 5] in AF (for tim3 channels 1-4) 
+    // enable pb[0, 1, 4, 5] in AF (for tim3 channels 1-4)
     GPIOB->MODER &= ~(GPIO_MODER_MODER0_0 | GPIO_MODER_MODER1 | GPIO_MODER_MODER4 | GPIO_MODER_MODER5);
     GPIOB->MODER |= (GPIO_MODER_MODER0_1 | GPIO_MODER_MODER1_1 | GPIO_MODER_MODER4_1 | GPIO_MODER_MODER5_1);
 
@@ -51,12 +51,12 @@ void setup_tim3(void) {
 
 
     // set CCR
-    
+
     TIM3->CCR1 = 250;
     TIM3->CCR2 = 500;
     TIM3->CCR3 = 750;
     TIM3->CCR4 = 1000;
-    
+
 
     /*
     TIM3->CCR1 = 625;
@@ -64,7 +64,26 @@ void setup_tim3(void) {
     TIM3->CCR3 = 2500;
     TIM3->CCR4 = 5000;
     */
-    
+
+}
+
+void IrSensor_Init()
+{
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+    GPIOA->MODER |= GPIO_MODER_MODER1_Msk;
+    RCC->APB2ENR |= RCC_APB2ENR_ADCEN;
+
+    RCC->CR2 |= RCC_CR2_HSI14ON;
+    while ((RCC->CR2 & RCC_CR2_HSI14RDY) == 0)
+    {
+    }
+
+    ADC1->CR |= ADC_CR_ADEN;
+    while ((ADC1->ISR & ADC_ISR_ADRDY) == 0)
+    {
+    }
+
+    ADC1->CHSELR |= ADC_CHSELR_CHSEL1;
 }
 
 
@@ -72,15 +91,24 @@ void setup_tim3(void) {
 int main(void) {
     setup_serial();
     internal_clock();
-    
-    autotest();
+
+    // autotest();
     printf("\nstart\n");
     setup_tim3();
     printf("\nsuccess\n");
+    IrSensor_Init();
+    int voltage = 1;
 
     while(1) {
         if ((USART5->ISR & USART_ISR_RXNE))  // if receive buffer has some data in it
             USART5->TDR = USART5->RDR;       // copy that data into transmit buffer.
+
+    ADC1->CR |= ADC_CR_ADSTART;
+    while(ADC1->ISR & ADC_ISR_EOC == 0)
+    {
+
+    }
+    // voltage = (ADC1->DR / 4096.0) * 3.3;
+    printf("ADC = %d \n", voltage);
     }
 }
-
