@@ -2,6 +2,11 @@
 #include <math.h>
 #include <stdio.h>
 
+#define LOOPVAL 10000
+#define CCRVAL 1000
+#define STEPS_180 1024
+//100000 loop value works
+
 extern void autotest();
 extern void internal_clock();
 
@@ -18,6 +23,97 @@ void setup_serial(void)
     USART5->BRR = 0x340;
     USART5->CR1 |= 0x0000000c;
     USART5->CR1 |= 0x00000001;
+}
+
+void turn_CW(void) {
+    int current_step = 0;
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    int l = 0;
+    while(current_step < STEPS_180) {
+        for(i = 0; i < LOOPVAL; i++) {
+            TIM3->CCR1 = CCRVAL;
+            TIM3->CCR2 = 0;
+            TIM3->CCR3 = 0;
+            TIM3->CCR4 = 0;
+        }
+        i = 0;
+        current_step++;
+
+        for(j = 0; j < LOOPVAL; j++) {
+            TIM3->CCR1 = 0;
+            TIM3->CCR2 = CCRVAL;
+            TIM3->CCR3 = 0;
+            TIM3->CCR4 = 0;
+        }
+        j = 0;
+        current_step++;
+
+        for(k = 0; k < LOOPVAL; k++) {
+            TIM3->CCR1 = 0;
+            TIM3->CCR2 = 0;
+            TIM3->CCR3 = CCRVAL;
+            TIM3->CCR4 = 0;
+        }
+        k = 0;
+        current_step++;
+
+        for(l = 0; l < LOOPVAL; l++) {
+            TIM3->CCR1 = 0;
+            TIM3->CCR2 = 0;
+            TIM3->CCR3 = 0;
+            TIM3->CCR4 = CCRVAL;
+        }
+        l = 0;
+        current_step++;
+    }    
+}
+
+void turn_CCW(void) {
+    int current_step = 0;
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    int l = 0;
+    while(current_step < STEPS_180)
+    {
+        for(i = 0; i < LOOPVAL; i++) {
+            TIM3->CCR1 = 0;
+            TIM3->CCR2 = 0;
+            TIM3->CCR3 = 0;
+            TIM3->CCR4 = CCRVAL;
+        }
+        i = 0;
+        current_step++;
+
+        for(j = 0; j < LOOPVAL; j++) {
+            TIM3->CCR1 = 0;
+            TIM3->CCR2 = 0;
+            TIM3->CCR3 = CCRVAL;
+            TIM3->CCR4 = 0;
+        }
+        j = 0;
+        current_step++;
+
+        for(k = 0; k < LOOPVAL; k++) {
+            TIM3->CCR1 = 0;
+            TIM3->CCR2 = CCRVAL;
+            TIM3->CCR3 = 0;
+            TIM3->CCR4 = 0;
+        }
+        k = 0;
+        current_step++;
+
+        for(l = 0; l < LOOPVAL; l++) {
+            TIM3->CCR1 = CCRVAL;
+            TIM3->CCR2 = 0;
+            TIM3->CCR3 = 0;
+            TIM3->CCR4 = 0;
+        }
+        l = 0;
+        current_step++;
+    }
 }
 
 void setup_tim3(void) {
@@ -49,113 +145,6 @@ void setup_tim3(void) {
     TIM3->CCER |= TIM_CCER_CC3E;
     TIM3->CCER |= TIM_CCER_CC4E;
     TIM3->CR1 |= TIM_CR1_CEN;
-
-
-    // set CCR
-    
-    int i = 0;
-    int j = 0;
-    int k = 0;
-    int l = 0;
-
-    int loopVal = 10000;
-
-//100000 loop value works
-
-/*
-    while(1)
-    {
-        for(i = 0; i< loopVal; i++)
-        {
-            TIM3->CCR1 = 1000;
-            TIM3->CCR2 = 0;
-            TIM3->CCR3 = 0;
-            TIM3->CCR4 = 0;
-        }
-        i = 0;
-
-        for(j = 0; j< loopVal; j++)
-        {
-            TIM3->CCR1 = 0;
-            TIM3->CCR2 = 1000;
-            TIM3->CCR3 = 0;
-            TIM3->CCR4 = 0;
-        }
-        j = 0;
-
-        for(k = 0; k< loopVal; k++)
-        {
-            TIM3->CCR1 = 0;
-            TIM3->CCR2 = 0;
-            TIM3->CCR3 = 1000;
-            TIM3->CCR4 = 0;
-        }
-        k = 0;
-
-        for(l = 0; l< loopVal; l++)
-        {
-            TIM3->CCR1 = 0;
-            TIM3->CCR2 = 0;
-            TIM3->CCR3 = 0;
-            TIM3->CCR4 = 1000;
-        }
-        l = 0;
-    }
-    */
-    
-
-
-
-    while(1)
-    {
-        for(i = 0; i< loopVal; i++)
-        {
-            TIM3->CCR1 = 0;
-            TIM3->CCR2 = 0;
-            TIM3->CCR3 = 0;
-            TIM3->CCR4 = 1000;
-        }
-        i = 0;
-
-        for(j = 0; j< loopVal; j++)
-        {
-            TIM3->CCR1 = 0;
-            TIM3->CCR2 = 0;
-            TIM3->CCR3 = 1000;
-            TIM3->CCR4 = 0;
-        }
-        j = 0;
-
-        for(k = 0; k< loopVal; k++)
-        {
-            TIM3->CCR1 = 0;
-            TIM3->CCR2 = 1000;
-            TIM3->CCR3 = 0;
-            TIM3->CCR4 = 0;
-        }
-        k = 0;
-
-        for(l = 0; l< loopVal; l++)
-        {
-            TIM3->CCR1 = 1000;
-            TIM3->CCR2 = 0;
-            TIM3->CCR3 = 0;
-            TIM3->CCR4 = 0;
-        }
-        l = 0;
-    }
-    
-    
-
-
-
-    /*
-    TIM3->CCR1 = 625;
-    TIM3->CCR2 = 1250;
-    TIM3->CCR3 = 2500;
-    TIM3->CCR4 = 5000;
-    */
-    
 }
 
 
@@ -165,13 +154,20 @@ int main(void) {
     internal_clock();
     
     autotest();
-    printf("\nstart\n");
+    printf("setting up tim3\n");
     setup_tim3();
-    printf("\nsuccess\n");
+    printf("done setting up tim3\n");
 
     while(1) {
-        if ((USART5->ISR & USART_ISR_RXNE))  // if receive buffer has some data in it
-            USART5->TDR = USART5->RDR;       // copy that data into transmit buffer.
+        printf("Turning CW\n");
+        turn_CW();
+        printf("Turning CCW\n");
+        turn_CCW();
     }
+
+    // while(1) {
+    //     if ((USART5->ISR & USART_ISR_RXNE))  // if receive buffer has some data in it
+    //         USART5->TDR = USART5->RDR;       // copy that data into transmit buffer.
+    // }
 }
 
