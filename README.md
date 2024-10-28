@@ -40,3 +40,9 @@ The primary goal is to:
    ```bash
    git clone https://github.com/yourusername/IR-stepper-motor-project.git
    cd IR-stepper-motor-project
+2. **Make a Branch**:
+   To make a new branch:
+   ```bash
+   git checkout -b branchName
+   '''
+   
