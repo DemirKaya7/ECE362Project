@@ -18,10 +18,11 @@ int main(void) {
     setup_tim3();
     printf("done setting up tim3\n");
 
+    int universal_step = 0;
     while(1) {
         printf("Turning CW\n");
-        turn_CW();
+        turn_CW(&universal_step);
         printf("Turning CCW\n");
-        turn_CCW();
+        turn_CCW(&universal_step);
     }
 }
