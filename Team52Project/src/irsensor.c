@@ -54,11 +54,10 @@ static float adcToDistance(uint32_t adc)
    return distance;
 }
 
-uint32_t GetIrSensor()
+float GetIrSensorDistanceInCm()
 {
    StartSensorReading();
    uint32_t adc = WaitForAdcSensorReading();
    float distance = adcToDistance(adc);
-   printf("distance = %d cm\n", (int)distance);
-   return adc;
+   return distance;
 }

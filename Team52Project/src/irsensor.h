@@ -6,6 +6,6 @@
 void IrSensor_Init(void);
 void StartSensorReading(void);
 uint32_t WaitForAdcSensorReading(void);
-uint32_t GetIrSensor(void);
+float GetIrSensorDistanceInCm(void);
 
 #endif

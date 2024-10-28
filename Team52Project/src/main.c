@@ -19,10 +19,10 @@ int main(void) {
     printf("done setting up tim3\n");
 
     while(1) {
-        printf("%ld\n", GetIrSensor());
+        printf("%d cm\n", (int)GetIrSensorDistanceInCm());
         printf("Turning CW\n");
         turn_CW();
-        printf("%ld\n", GetIrSensor());
+        printf("%d cm\n", (int)GetIrSensorDistanceInCm());
         printf("Turning CCW\n");
         turn_CCW();
     }
