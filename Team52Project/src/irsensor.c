@@ -2,6 +2,9 @@
 #include "math.h"
 #include <stdio.h>
 
+#define REFERENCE_VOLT 5
+#define ADC_RES 12
+
 void IrSensor_Init()
 {
     RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
@@ -38,7 +41,7 @@ uint32_t WaitForAdcSensorReading()
 }
 
 static float adcToVoltage(uint32_t adcValue) {
-    return ((float)adcValue / (pow(2, 12))) * 5;
+    return ((float)adcValue / (pow(2, ADC_RES))) * REFERENCE_VOLT;
 }
 
 static float adcToDistance(uint32_t adc)

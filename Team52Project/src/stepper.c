@@ -2,6 +2,7 @@
 #include "stepper.h"
 #include <math.h>
 #include <stdio.h>
+#include "irsensor.h"
 
 #define LOOPVAL 10000
 #define CCRVAL 1000
@@ -23,6 +24,7 @@ void turn_CW(void) {
         }
         i = 0;
         current_step++;
+        printf("%d cm\n", (int)GetIrSensorDistanceInCm());
 
         for(j = 0; j < LOOPVAL; j++) {
             TIM3->CCR1 = 0;
@@ -32,6 +34,7 @@ void turn_CW(void) {
         }
         j = 0;
         current_step++;
+        printf("%d cm\n", (int)GetIrSensorDistanceInCm());
 
         for(k = 0; k < LOOPVAL; k++) {
             TIM3->CCR1 = 0;
@@ -41,6 +44,7 @@ void turn_CW(void) {
         }
         k = 0;
         current_step++;
+        printf("%d cm\n", (int)GetIrSensorDistanceInCm());
 
         for(l = 0; l < LOOPVAL; l++) {
             TIM3->CCR1 = 0;
@@ -50,6 +54,7 @@ void turn_CW(void) {
         }
         l = 0;
         current_step++;
+        printf("%d cm\n", (int)GetIrSensorDistanceInCm());
     }
 }
 
@@ -69,6 +74,7 @@ void turn_CCW(void) {
         }
         i = 0;
         current_step++;
+        printf("%d cm\n", (int)GetIrSensorDistanceInCm());
 
         for(j = 0; j < LOOPVAL; j++) {
             TIM3->CCR1 = 0;
@@ -78,6 +84,7 @@ void turn_CCW(void) {
         }
         j = 0;
         current_step++;
+        printf("%d cm\n", (int)GetIrSensorDistanceInCm());
 
         for(k = 0; k < LOOPVAL; k++) {
             TIM3->CCR1 = 0;
@@ -87,6 +94,7 @@ void turn_CCW(void) {
         }
         k = 0;
         current_step++;
+        printf("%d cm\n", (int)GetIrSensorDistanceInCm());
 
         for(l = 0; l < LOOPVAL; l++) {
             TIM3->CCR1 = CCRVAL;
@@ -96,6 +104,7 @@ void turn_CCW(void) {
         }
         l = 0;
         current_step++;
+        printf("%d cm\n", (int)GetIrSensorDistanceInCm());
     }
 }
 
