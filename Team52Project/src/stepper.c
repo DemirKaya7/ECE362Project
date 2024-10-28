@@ -9,112 +9,120 @@
 #define STEPS_180 1024
 //100000 loop value works
 
-void turn_CW(int * step) {
-    int current_step = 0;
+// write an ISR for button interrupt
+
+
+void turn_CW(uint32_t * step) {
     int i = 0;
     int j = 0;
     int k = 0;
     int l = 0;
-    while(current_step < STEPS_180) {
-        for(i = 0; i < LOOPVAL; i++) {
-            TIM3->CCR1 = CCRVAL;
-            TIM3->CCR2 = 0;
-            TIM3->CCR3 = 0;
-            TIM3->CCR4 = 0;
-        }
-        i = 0;
-        current_step++;
-        (*step)++;
-        // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
+    while((*step) <= STEPS_180) {
+        switch((*step) % 4)
+        {
+            case 0:
+                for(i = 0; i < LOOPVAL; i++) {
+                    TIM3->CCR1 = CCRVAL;
+                    TIM3->CCR2 = 0;
+                    TIM3->CCR3 = 0;
+                    TIM3->CCR4 = 0;
+                }
+                i = 0;
+                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
+                break;
 
-        for(j = 0; j < LOOPVAL; j++) {
-            TIM3->CCR1 = 0;
-            TIM3->CCR2 = CCRVAL;
-            TIM3->CCR3 = 0;
-            TIM3->CCR4 = 0;
-        }
-        j = 0;
-        current_step++;
-        (*step)++;
-        // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
+            case 1:
+                for(j = 0; j < LOOPVAL; j++) {
+                    TIM3->CCR1 = 0;
+                    TIM3->CCR2 = CCRVAL;
+                    TIM3->CCR3 = 0;
+                    TIM3->CCR4 = 0;
+                }
+                j = 0;
+                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
+                break;
 
-        for(k = 0; k < LOOPVAL; k++) {
-            TIM3->CCR1 = 0;
-            TIM3->CCR2 = 0;
-            TIM3->CCR3 = CCRVAL;
-            TIM3->CCR4 = 0;
+            case 2:
+                for(k = 0; k < LOOPVAL; k++) {
+                    TIM3->CCR1 = 0;
+                    TIM3->CCR2 = 0;
+                    TIM3->CCR3 = CCRVAL;
+                    TIM3->CCR4 = 0;
+                }
+                k = 0;
+                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
+                break;
+            
+            case 3:
+                for(l = 0; l < LOOPVAL; l++) {
+                    TIM3->CCR1 = 0;
+                    TIM3->CCR2 = 0;
+                    TIM3->CCR3 = 0;
+                    TIM3->CCR4 = CCRVAL;
+                }
+                l = 0;
+                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
+                break;
         }
-        k = 0;
-        current_step++;
         (*step)++;
-        // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
-
-        for(l = 0; l < LOOPVAL; l++) {
-            TIM3->CCR1 = 0;
-            TIM3->CCR2 = 0;
-            TIM3->CCR3 = 0;
-            TIM3->CCR4 = CCRVAL;
-        }
-        l = 0;
-        current_step++;
-        (*step)++;
-        // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
-        printf("step = %d\n", (*step));
+        printf("step = %ld\n", (*step));
     }
 }
 
-void turn_CCW(int * step) {
-    int current_step = 0;
+void turn_CCW(uint32_t * step) {
     int i = 0;
     int j = 0;
     int k = 0;
     int l = 0;
-    while(current_step < STEPS_180)
-    {
-        for(i = 0; i < LOOPVAL; i++) {
-            TIM3->CCR1 = 0;
-            TIM3->CCR2 = 0;
-            TIM3->CCR3 = 0;
-            TIM3->CCR4 = CCRVAL;
-        }
-        i = 0;
-        current_step++;
-        (*step)--;
-        // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
+    while((*step) >= 0) {
+        switch((*step) % 4)
+        {
+            case 3:
+                for(i = 0; i < LOOPVAL; i++) {
+                    TIM3->CCR1 = 0;
+                    TIM3->CCR2 = 0;
+                    TIM3->CCR3 = 0;
+                    TIM3->CCR4 = CCRVAL;
+                }
+                i = 0;
+                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
+                break;
 
-        for(j = 0; j < LOOPVAL; j++) {
-            TIM3->CCR1 = 0;
-            TIM3->CCR2 = 0;
-            TIM3->CCR3 = CCRVAL;
-            TIM3->CCR4 = 0;
-        }
-        j = 0;
-        current_step++;
-        (*step)--;
-        // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
+            case 2:
+                for(j = 0; j < LOOPVAL; j++) {
+                    TIM3->CCR1 = 0;
+                    TIM3->CCR2 = 0;
+                    TIM3->CCR3 = CCRVAL;
+                    TIM3->CCR4 = 0;
+                }
+                j = 0;
+                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
+                break;
 
-        for(k = 0; k < LOOPVAL; k++) {
-            TIM3->CCR1 = 0;
-            TIM3->CCR2 = CCRVAL;
-            TIM3->CCR3 = 0;
-            TIM3->CCR4 = 0;
+            case 1:
+                for(k = 0; k < LOOPVAL; k++) {
+                    TIM3->CCR1 = 0;
+                    TIM3->CCR2 = CCRVAL;
+                    TIM3->CCR3 = 0;
+                    TIM3->CCR4 = 0;
+                }
+                k = 0;
+                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
+                break;
+            
+            case 0:
+                for(l = 0; l < LOOPVAL; l++) {
+                    TIM3->CCR1 = CCRVAL;
+                    TIM3->CCR2 = 0;
+                    TIM3->CCR3 = 0;
+                    TIM3->CCR4 = 0;
+                }
+                l = 0;
+                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
+                break;
         }
-        k = 0;
-        current_step++;
         (*step)--;
-        // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
-
-        for(l = 0; l < LOOPVAL; l++) {
-            TIM3->CCR1 = CCRVAL;
-            TIM3->CCR2 = 0;
-            TIM3->CCR3 = 0;
-            TIM3->CCR4 = 0;
-        }
-        l = 0;
-        current_step++;
-        (*step)--;
-        // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
-        printf("step = %d\n", (*step));
+        printf("step = %ld\n", (*step));
     }
 }
 
