@@ -56,7 +56,7 @@ int main(void) {
     LCD_Setup();
     LCD_Clear(0x0);
 
-    LCD_DrawFillRectangle(100, 100, 200, 200, 0x0);
+    LCD_DrawFillRectangle(100, 100, 200, 200, 0xFF);
 
     printf("drawn\n");
 
