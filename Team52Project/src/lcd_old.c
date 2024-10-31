@@ -1,0 +1,144 @@
+#include "lcd_old.h"
+
+void nano_wait(unsigned int n) {
+    asm(    "        mov r0,%0\n"
+            "repeat: sub r0,#83\n"
+            "        bgt repeat\n" : : "r"(n) : "r0", "cc");
+}
+
+void init_spi() {
+    RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
+    RCC->AHBENR  |= RCC_AHBENR_GPIOAEN; 
+
+    // GPIOA->MODER &= ~((3 << (5 * 2)) | (3 << (7 * 2))); // Clear mode bits
+    GPIOA->MODER &= ~(GPIO_MODER_MODER5_0 | GPIO_MODER_MODER7_0);
+    // GPIOA->MODER |= (2 << (5 * 2)) | (2 << (7 * 2));    // Set to AF mode
+    GPIOA->MODER |= (GPIO_MODER_MODER5_1 | GPIO_MODER_MODER7_1);
+    // GPIOA->AFR[0] |= (5 << (5 * 4)) | (5 << (7 * 4));   // Set AF5 (SPI1) for PA5 and PA7
+    GPIOA->AFR[0] &= ~(1 << GPIO_AFRL_AFRL5_Pos);
+    GPIOA->AFR[0] &= ~(1 << GPIO_AFRL_AFRL7_Pos);
+
+
+    // Configure PA4 (CS), PA6 (DC), and PA3 (RST) as general output pins
+    // GPIOA->MODER |= (1 << (4 * 2)) | (1 << (6 * 2)) | (1 << (3 * 2));
+    GPIOA->MODER &= ~(GPIO_MODER_MODER4_1 | GPIO_MODER_MODER6_1 | GPIO_MODER_MODER3_1);
+    GPIOA->MODER |= (GPIO_MODER_MODER4_0 | GPIO_MODER_MODER6_0 | GPIO_MODER_MODER3_0);
+
+    // Code from Lab 6 init_spi1
+    SPI1->CR1 &= ~SPI_CR1_SPE;
+    // SPI1->CR1 |= SPI_CR1_BR
+    SPI1->CR1 &= ~(SPI_CR1_BR);
+    
+    // SPI1->CR2 |= SPI_CR2_DS_3 | SPI_CR2_DS_0;
+    // SPI1->CR2 &= ~(SPI_CR2_DS_2 | SPI_CR2_DS_1);
+    SPI1->CR2 |= SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0;
+    SPI1->CR2 &= ~(SPI_CR2_DS_3);
+
+    // try commenting out ssoe nssp
+    // SPI1->CR2 |= SPI_CR2_SSOE | SPI_CR2_NSSP;
+    //
+    // SPI1->CR1 = SPI_CR1_MSTR | SPI_CR1_BR_0 | SPI_CR1_SSI | SPI_CR1_SSM;
+    SPI1->CR1 = SPI_CR1_MSTR | SPI_CR1_BR_0 | SPI_CR1_SSI | SPI_CR1_SSM;
+    SPI1->CR2 |= SPI_CR2_TXDMAEN;
+
+    SPI1->CR1 |= SPI_CR1_SPE;
+}
+
+void send_command(uint8_t command) {
+    GPIOA->BSRR = (1 << 6) << 16; // DC low for command
+    GPIOA->BSRR = (1 << 4) << 16; // CS low
+    while (!(SPI1->SR & SPI_SR_TXE)); // Wait until TX buffer is empty
+    SPI1->DR = command;
+    while (!(SPI1->SR & SPI_SR_TXE)); // Wait until transmission is complete
+    GPIOA->BSRR = (1 << 4);           // CS high
+}
+
+void send_data(uint8_t data) {
+    GPIOA->BSRR = (1 << 6);       // DC high for data
+    GPIOA->BSRR = (1 << 4) << 16; // CS low
+    while (!(SPI1->SR & SPI_SR_TXE)); // Wait until TX buffer is empty
+    SPI1->DR = data;
+    while (!(SPI1->SR & SPI_SR_TXE)); // Wait until transmission is complete
+    GPIOA->BSRR = (1 << 4);           // CS high
+}
+
+void lcd_reset() {
+    GPIOA->BSRR = (1 << 3) << 16; // Set PA3 (RST) low
+    // for (volatile int i = 0; i < 100000; i++); // Short delay
+    nano_wait(1000000000);
+    GPIOA->BSRR = (1 << 3);       // Set PA3 (RST) high
+}
+
+void init_lcd() {
+    lcd_reset();           // Reset the LCD
+    send_command(0x28);    // Display OFF
+    send_command(0x11);    // Exit Sleep mode
+    // for (volatile int i = 0; i < 1000000; i++); // Short delay
+    nano_wait(1000000000);
+
+    // Initialization sequence specific to your LCD
+    send_command(0xCF);
+    send_data(0x00);
+    send_data(0xC1);
+    send_data(0x30);
+
+    // Additional commands for your LCD...
+    send_command(0x29); // Display ON
+}
+
+void send_data16(uint16_t data) {
+    SPI1 -> CR2 |= SPI_CR2_DS;
+    while (!(SPI1->SR & SPI_SR_TXE));
+    SPI1 -> DR = data;
+    SPI1->CR2 |= SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0;
+    SPI1->CR2 &= ~(SPI_CR2_DS_3);
+}
+
+void draw_pixel(uint16_t x, uint16_t y, uint16_t color) {
+    // Set column address
+    send_command(0x2A);
+    send_data(x >> 8);
+    send_data(x & 0xFF);
+    send_data(x >> 8);
+    send_data(x & 0xFF);
+
+    // Set row address
+    send_command(0x2B);
+    send_data(y >> 8);
+    send_data(y & 0xFF);
+    send_data(y >> 8);
+    send_data(y & 0xFF);
+
+    // Write color data
+    send_command(0x2C);
+    send_data16(color);
+}
+
+// code from lab 6
+uint16_t display[34] = {
+        0x002, // Command to set the cursor at the first position line 1
+        0x200+'E', 0x200+'C', 0x200+'E', 0x200+'3', 0x200+'6', + 0x200+'2', 0x200+' ', 0x200+'i',
+        0x200+'s', 0x200+' ', 0x200+'t', 0x200+'h', + 0x200+'e', 0x200+' ', 0x200+' ', 0x200+' ',
+        0x0c0, // Command to set the cursor at the first position line 2
+        0x200+'c', 0x200+'l', 0x200+'a', 0x200+'s', 0x200+'s', + 0x200+' ', 0x200+'f', 0x200+'o',
+        0x200+'r', 0x200+' ', 0x200+'y', 0x200+'o', + 0x200+'u', 0x200+'!', 0x200+' ', 0x200+' ',
+};
+
+void spi1_setup_dma(void) {
+    RCC->AHBENR |= RCC_AHBENR_DMA1EN;
+    DMA1_Channel3->CCR &= ~DMA_CCR_EN;
+    DMA1_Channel3->CMAR = (uint32_t)(&display);
+    DMA1_Channel3->CPAR = (uint32_t)(&(SPI1->DR));
+    DMA1_Channel3->CNDTR = sizeof(display) / sizeof(display[0]);
+    DMA1_Channel3->CCR |= DMA_CCR_DIR;
+    DMA1_Channel3->CCR |= DMA_CCR_MINC;
+    DMA1_Channel3->CCR &= ~(DMA_CCR_MSIZE_1 | DMA_CCR_PSIZE_1);
+    DMA1_Channel3->CCR |= DMA_CCR_MSIZE_0;
+    DMA1_Channel3->CCR |= DMA_CCR_PSIZE_0;
+    DMA1_Channel3->CCR |= DMA_CCR_CIRC;
+    SPI1->CR2 |= SPI_CR2_TXDMAEN;
+}
+
+void spi1_enable_dma(void) {
+    DMA1_Channel3->CCR |= DMA_CCR_EN;
+}
