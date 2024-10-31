@@ -11,6 +11,7 @@ void init_spi() {
     // Configure PA4 (CS), PA6 (DC), and PA3 (RST) as general output pins
     GPIOA->MODER |= (1 << (4 * 2)) | (1 << (6 * 2)) | (1 << (3 * 2));
 
+    // Code from Lab 6 init_spi1
     SPI1->CR1 &= ~SPI_CR1_SPE;
     SPI1->CR1 |= SPI_CR1_BR;
     
@@ -79,4 +80,33 @@ void draw_pixel(uint16_t x, uint16_t y, uint16_t color) {
     send_command(0x2C);
     send_data(color >> 8);
     send_data(color & 0xFF);
+}
+
+// code from lab 6
+uint16_t display[34] = {
+        0x002, // Command to set the cursor at the first position line 1
+        0x200+'E', 0x200+'C', 0x200+'E', 0x200+'3', 0x200+'6', + 0x200+'2', 0x200+' ', 0x200+'i',
+        0x200+'s', 0x200+' ', 0x200+'t', 0x200+'h', + 0x200+'e', 0x200+' ', 0x200+' ', 0x200+' ',
+        0x0c0, // Command to set the cursor at the first position line 2
+        0x200+'c', 0x200+'l', 0x200+'a', 0x200+'s', 0x200+'s', + 0x200+' ', 0x200+'f', 0x200+'o',
+        0x200+'r', 0x200+' ', 0x200+'y', 0x200+'o', + 0x200+'u', 0x200+'!', 0x200+' ', 0x200+' ',
+};
+
+void spi1_setup_dma(void) {
+    RCC->AHBENR |= RCC_AHBENR_DMA1EN;
+    DMA1_Channel3->CCR &= ~DMA_CCR_EN;
+    DMA1_Channel3->CMAR = display;
+    DMA1_Channel3->CPAR = &(SPI1->DR);
+    DMA1_Channel3->CNDTR = sizeof(display) / sizeof(display[0]);
+    DMA1_Channel3->CCR |= DMA_CCR_DIR;
+    DMA1_Channel3->CCR |= DMA_CCR_MINC;
+    DMA1_Channel3->CCR &= ~(DMA_CCR_MSIZE_1 | DMA_CCR_PSIZE_1);
+    DMA1_Channel3->CCR |= DMA_CCR_MSIZE_0;
+    DMA1_Channel3->CCR |= DMA_CCR_PSIZE_0;
+    DMA1_Channel3->CCR |= DMA_CCR_CIRC;
+    SPI1->CR2 |= SPI_CR2_TXDMAEN;
+}
+
+void spi1_enable_dma(void) {
+    DMA1_Channel3->CCR |= DMA_CCR_EN;
 }

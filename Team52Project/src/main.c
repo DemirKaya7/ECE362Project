@@ -14,7 +14,7 @@ int main(void) {
     internal_clock();
     // IrSensor_Init();
 
-    autotest();
+    // autotest();
     // printf("setting up tim3\n");
     // setup_tim3();
     // printf("done setting up tim3\n");
@@ -29,12 +29,16 @@ int main(void) {
     init_spi();
     lcd_reset();
     init_lcd();
-    for (int i = 0; i < 240; i++) { 
-        for (int j = 0; j < 240; j++){
-            if (i == 0 && j == 0) {
-                printf("drawing\n");
-            }
-            draw_pixel(i,j,0x0f00);
-        }
-    }
+    draw_pixel(120, 160, 0xFFFF);
+    printf("pixel drawn\n"); // pixel should be shown, but nothing is changing on the screen, this line is being printed
+    // spi1_setup_dma();
+    // spi1_enable_dma();
+    // for (int i = 0; i < 240; i++) { 
+    //     for (int j = 0; j < 240; j++){
+    //         if (i == 0 && j == 0) {
+    //             printf("drawing\n");
+    //         }
+    //         draw_pixel(i,j,0x0000);
+    //     }
+    // }
 }
