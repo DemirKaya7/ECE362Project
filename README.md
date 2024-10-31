@@ -45,4 +45,8 @@ The primary goal is to:
    ```bash
    git checkout -b branchName
    '''
-   
+
+
+
+this is for spi for lcd disp
+   https://github.com/ece362-purdue/labs/blob/main/lab7-usart/TFT_SD.md
