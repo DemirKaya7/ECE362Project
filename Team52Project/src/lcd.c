@@ -4,10 +4,12 @@ void init_spi() {
     RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
     RCC->AHBENR  |= RCC_AHBENR_GPIOAEN; 
 
-    GPIOA->MODER |= (GPIO_MODER_MODER15_1 | GPIO_MODER_MODER5_1 | GPIO_MODER_MODER7_1);
-    
-    GPIOA->AFR[0] &= 0x0f0fffff;
-    GPIOA->AFR[1] &= 0x0fffffff;
+    GPIOA->MODER &= ~((3 << (5 * 2)) | (3 << (7 * 2))); // Clear mode bits
+    GPIOA->MODER |= (2 << (5 * 2)) | (2 << (7 * 2));    // Set to AF mode
+    GPIOA->AFR[0] |= (5 << (5 * 4)) | (5 << (7 * 4));   // Set AF5 (SPI1) for PA5 and PA7
+
+    // Configure PA4 (CS), PA6 (DC), and PA3 (RST) as general output pins
+    GPIOA->MODER |= (1 << (4 * 2)) | (1 << (6 * 2)) | (1 << (3 * 2));
 
     SPI1->CR1 &= ~SPI_CR1_SPE;
     SPI1->CR1 |= SPI_CR1_BR;
@@ -16,7 +18,7 @@ void init_spi() {
     SPI1->CR2 &= ~(SPI_CR2_DS_2 | SPI_CR2_DS_1);
 
     SPI1->CR2 |= SPI_CR2_SSOE | SPI_CR2_NSSP;
-    SPI1->CR1 |= SPI_CR1_MSTR;
+    SPI1->CR1 = SPI_CR1_MSTR | SPI_CR1_BR_0 | SPI_CR1_SSI | SPI_CR1_SSM;
     SPI1->CR2 |= SPI_CR2_TXDMAEN;
 
     SPI1->CR1 |= SPI_CR1_SPE;
