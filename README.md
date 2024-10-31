@@ -34,6 +34,9 @@ The primary goal is to:
 - **ULN2003 Motor Driver**: Controls the stepper motor from the STM32 microcontroller.
 - **LCD Display**: Shows the measured distances.
 
+## Useful Documents
+- Datasheet for lcd display: https://s3.eu-central-1.amazonaws.com/elektormagazine/shopify/datasheet-ILI9341.pdf
+
 ## Setup
 
 1. **Clone the Repository**:
