@@ -34,9 +34,22 @@ The primary goal is to:
 - **ULN2003 Motor Driver**: Controls the stepper motor from the STM32 microcontroller.
 - **LCD Display**: Shows the measured distances.
 
+## Useful Documents
+- Datasheet for lcd display: https://s3.eu-central-1.amazonaws.com/elektormagazine/shopify/datasheet-ILI9341.pdf
+
 ## Setup
 
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/yourusername/IR-stepper-motor-project.git
    cd IR-stepper-motor-project
+2. **Make a Branch**:
+   To make a new branch:
+   ```bash
+   git checkout -b branchName
+   '''
+
+
+
+this is for spi for lcd disp
+   https://github.com/ece362-purdue/labs/blob/main/lab7-usart/TFT_SD.md
