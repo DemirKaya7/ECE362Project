@@ -127,18 +127,18 @@ void turn_CCW(uint32_t * step) {
 }
 
 void setup_tim3(void) {
-    RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
+    RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
     RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
 
-    // enable pb[0, 1, 4, 5] in AF (for tim3 channels 1-4)
-    GPIOB->MODER &= ~(GPIO_MODER_MODER0_0 | GPIO_MODER_MODER1 | GPIO_MODER_MODER4 | GPIO_MODER_MODER5);
-    GPIOB->MODER |= (GPIO_MODER_MODER0_1 | GPIO_MODER_MODER1_1 | GPIO_MODER_MODER4_1 | GPIO_MODER_MODER5_1);
+    // enable pa[8,9,10,11] in AF (for tim3 channels 1-4)
+    GPIOA->MODER &= ~(GPIO_MODER_MODER8 | GPIO_MODER_MODER9 | GPIO_MODER_MODER10 | GPIO_MODER_MODER11);
+    GPIOA->MODER |= (GPIO_MODER_MODER8_1 | GPIO_MODER_MODER9_1 | GPIO_MODER_MODER10_1 | GPIO_MODER_MODER11_1);
 
     // specify AF1
-    GPIOB->AFR[0] |= (1 << GPIO_AFRL_AFRL0_Pos);
-    GPIOB->AFR[0] |= (1 << GPIO_AFRL_AFRL1_Pos);
-    GPIOB->AFR[0] |= (1 << GPIO_AFRL_AFRL4_Pos);
-    GPIOB->AFR[0] |= (1 << GPIO_AFRL_AFRL5_Pos);
+    GPIOA->AFR[1] |= (2 << GPIO_AFRH_AFRH0_Pos);
+    GPIOA->AFR[1] |= (2 << GPIO_AFRH_AFRH1_Pos);
+    GPIOA->AFR[1] |= (2 << GPIO_AFRH_AFRH2_Pos);
+    GPIOA->AFR[1] |= (2 << GPIO_AFRH_AFRH3_Pos);
 
     // set for frequency of 48000 KHz
     TIM3->PSC = 480 - 1;

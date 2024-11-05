@@ -42,9 +42,9 @@ void init_all(void) {
 int main(void) {
     setup_serial();
     internal_clock();
-    IrSensor_Init();
+    // IrSensor_Init();
 
-//     autotest();
+    // autotest();
     printf("setting up tim3\n");
     setup_tim3();
 
@@ -56,17 +56,17 @@ int main(void) {
     // init_exti(&universal_step);
     printf("uni step = %ld\n", universal_step);
 
-    init_all();
-    printf("starting lcd\n");
+    // init_all();
+    // printf("starting lcd\n");
 
-    LCD_Setup();
-    printf("setup\n");
-    LCD_Clear(0x0);
-    printf("clear\n");
+    // LCD_Setup();
+    // printf("setup\n");
+    // LCD_Clear(0x0);
+    // printf("clear\n");
 
-    LCD_DrawFillRectangle(100, 100, 200, 200, 0x07E0);
+    // LCD_DrawFillRectangle(100, 100, 200, 200, 0x07E0);
 
-    printf("drawn\n");
+    // printf("drawn\n");
   
     
     while(1) {
