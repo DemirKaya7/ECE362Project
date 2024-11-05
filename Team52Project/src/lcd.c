@@ -8,8 +8,6 @@
 #include <stdint.h>
 #include "lcd.h"
 
-void nano_wait(int t);
-
 lcd_dev_t lcddev;
 
 #define SPI SPI1
@@ -29,6 +27,12 @@ lcd_dev_t lcddev;
 #define DC_BIT (1<<DC_NUM)
 #define DC_HIGH do { GPIOB->BSRR = GPIO_BSRR_BS_14; } while(0)
 #define DC_LOW  do { GPIOB->BSRR = GPIO_BSRR_BR_14; } while(0)
+
+void nano_wait(unsigned int n) {
+    asm(    "        mov r0,%0\n"
+            "repeat: sub r0,#83\n"
+            "        bgt repeat\n" : : "r"(n) : "r0", "cc");
+}
 
 // Set the CS pin low if val is non-zero.
 // Note that when CS is being set high again, wait on SPI to not be busy.

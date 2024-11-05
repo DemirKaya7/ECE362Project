@@ -42,10 +42,16 @@ int main(void) {
     setup_serial();
     internal_clock();
 
-    LCD_Setup();
-    LCD_Clear(0x0);
+    // autotest();
+    init_all();
+    printf("starting lcd\n");
 
-    LCD_DrawFillRectangle(100, 100, 200, 200, 0xFF);
+    LCD_Setup();
+    printf("setup\n");
+    LCD_Clear(0x0);
+    printf("clear\n");
+
+    LCD_DrawFillRectangle(100, 100, 200, 200, 0x07E0);
 
     printf("drawn\n");
 
