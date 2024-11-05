@@ -1,7 +1,8 @@
 {
     "files.associations": {
-        "math.h": "c",
         "stdio.h": "c",
-        "stm32f0xx.h": "c"
+        "stm32f0xx.h": "c",
+        "flash.h": "c",
+        "math.h": "c"
     }
 }

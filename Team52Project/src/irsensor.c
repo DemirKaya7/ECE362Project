@@ -32,7 +32,7 @@ void StartSensorReading()
 uint32_t WaitForAdcSensorReading()
 {
    uint32_t voltage;
-   while(ADC1->ISR & ADC_ISR_EOC == 0)
+   while((ADC1->ISR & ADC_ISR_EOC) == 0)
     {
 
     }
