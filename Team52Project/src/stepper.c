@@ -52,7 +52,7 @@ void turn_CW(uint32_t * step) {
                 k = 0;
                 // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
                 break;
-            
+
             case 3:
                 for(l = 0; l < LOOPVAL; l++) {
                     TIM3->CCR1 = 0;
@@ -74,7 +74,7 @@ void turn_CCW(uint32_t * step) {
     int j = 0;
     int k = 0;
     int l = 0;
-    while((*step) >= 0) {
+    while((*step) > 0) {
         switch((*step) % 4)
         {
             case 3:
@@ -109,7 +109,7 @@ void turn_CCW(uint32_t * step) {
                 k = 0;
                 // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
                 break;
-            
+
             case 0:
                 for(l = 0; l < LOOPVAL; l++) {
                     TIM3->CCR1 = CCRVAL;
@@ -130,15 +130,9 @@ void setup_tim3(void) {
     RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
     RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
 
-    // enable pa[8,9,10,11] in AF (for tim3 channels 1-4)
-    GPIOA->MODER &= ~(GPIO_MODER_MODER8 | GPIO_MODER_MODER9 | GPIO_MODER_MODER10 | GPIO_MODER_MODER11);
-    GPIOA->MODER |= (GPIO_MODER_MODER8_1 | GPIO_MODER_MODER9_1 | GPIO_MODER_MODER10_1 | GPIO_MODER_MODER11_1);
-
-    // specify AF1
-    GPIOA->AFR[1] |= (2 << GPIO_AFRH_AFRH0_Pos);
-    GPIOA->AFR[1] |= (2 << GPIO_AFRH_AFRH1_Pos);
-    GPIOA->AFR[1] |= (2 << GPIO_AFRH_AFRH2_Pos);
-    GPIOA->AFR[1] |= (2 << GPIO_AFRH_AFRH3_Pos);
+    // enable pB[6,7,8,9] -> [] in AF (for tim3 channels 1-4)
+    GPIOC->MODER &= ~(GPIO_MODER_MODER6 | GPIO_MODER_MODER7 | GPIO_MODER_MODER8 | GPIO_MODER_MODER9);
+    GPIOC->MODER |= (GPIO_MODER_MODER6_1 | GPIO_MODER_MODER7_1 | GPIO_MODER_MODER8_1 | GPIO_MODER_MODER9_1);
 
     // set for frequency of 48000 KHz
     TIM3->PSC = 480 - 1;

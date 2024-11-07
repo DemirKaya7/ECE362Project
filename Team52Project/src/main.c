@@ -12,7 +12,7 @@ extern void internal_clock();
 
 void init_all(void) {
     RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
-    RCC->AHBENR  |= RCC_AHBENR_GPIOBEN; 
+    RCC->AHBENR  |= RCC_AHBENR_GPIOBEN;
 
     // Configure PB8 (CS), PB14 (DC), and PB11 (RST) as general output pins
     GPIOB->MODER &= ~(GPIO_MODER_MODER8_1 | GPIO_MODER_MODER14_1 | GPIO_MODER_MODER11_1);
@@ -48,13 +48,13 @@ int main(void) {
     printf("setting up tim3\n");
     setup_tim3();
 
-    uint32_t write_this_thang = 46;
-    Flash_Write_Integer(write_this_thang);
+    // uint32_t write_this_thang = 46;
+    // Flash_Write_Integer(write_this_thang);
 
 
-    uint32_t universal_step = Flash_Read_Integer();
-    // init_exti(&universal_step);
-    printf("uni step = %ld\n", universal_step);
+    // uint32_t universal_step = Flash_Read_Integer();
+    // // init_exti(&universal_step);
+    // printf("uni step = %ld\n", universal_step);
 
     // init_all();
     // printf("starting lcd\n");
@@ -67,8 +67,9 @@ int main(void) {
     // LCD_DrawFillRectangle(100, 100, 200, 200, 0x07E0);
 
     // printf("drawn\n");
-  
-    
+    uint32_t universal_step = 0;
+
+
     while(1) {
         printf("Turning CW\n");
         turn_CW(&universal_step);
