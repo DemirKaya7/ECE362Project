@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "irsensor.h"
+#include "calculations.h"
 
 #define LOOPVAL 10000
 #define CCRVAL 1000
@@ -10,7 +11,6 @@
 //100000 loop value works
 
 // write an ISR for button interrupt
-
 
 void turn_CW(uint32_t * step) {
     int i = 0;
@@ -61,11 +61,11 @@ void turn_CW(uint32_t * step) {
                     TIM3->CCR4 = CCRVAL;
                 }
                 l = 0;
-                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
                 break;
         }
         (*step)++;
-        printf("step = %ld\n", (*step));
+        float distance = GetIrSensorDistanceInCm();
+        calculate_and_display(step, distance);
     }
 }
 
@@ -85,7 +85,6 @@ void turn_CCW(uint32_t * step) {
                     TIM3->CCR4 = CCRVAL;
                 }
                 i = 0;
-                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
                 break;
 
             case 2:
@@ -96,7 +95,6 @@ void turn_CCW(uint32_t * step) {
                     TIM3->CCR4 = 0;
                 }
                 j = 0;
-                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
                 break;
 
             case 1:
@@ -107,7 +105,6 @@ void turn_CCW(uint32_t * step) {
                     TIM3->CCR4 = 0;
                 }
                 k = 0;
-                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
                 break;
 
             case 0:
@@ -118,11 +115,11 @@ void turn_CCW(uint32_t * step) {
                     TIM3->CCR4 = 0;
                 }
                 l = 0;
-                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
                 break;
         }
         (*step)--;
-        printf("step = %ld\n", (*step));
+        float distance = GetIrSensorDistanceInCm();
+        calculate_and_display(step, distance);
     }
 }
 
