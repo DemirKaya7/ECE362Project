@@ -3,7 +3,10 @@
         "stdio.h": "c",
         "stm32f0xx.h": "c",
         "flash.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "calculations.h": "c",
+        "cmath": "c",
+        "complex": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

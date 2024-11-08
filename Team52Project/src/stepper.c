@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include "irsensor.h"
+#include "calculations.h"
 
 #define LOOPVAL 10000
 #define CCRVAL 1000
@@ -66,6 +67,12 @@ void turn_CW(uint32_t * step) {
         }
         (*step)++;
         printf("step = %ld\n", (*step));
+        ///////////////// calculation at every step
+        // get IR data
+        // convert distance to pixel
+        float distance = GetIrSensorDistanceInCm();
+        calculate_and_display((&step,), distance);
+        // display data
     }
 }
 

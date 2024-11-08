@@ -6,6 +6,7 @@
 #include "irsensor.h"
 #include "flash.h"
 #include "lcd.h"
+#include "calculations.h"
 
 extern void autotest();
 extern void internal_clock();
@@ -48,27 +49,8 @@ int main(void) {
     printf("setting up tim3\n");
     setup_tim3();
 
-    // uint32_t write_this_thang = 46;
-    // Flash_Write_Integer(write_this_thang);
-
-
-    // uint32_t universal_step = Flash_Read_Integer();
-    // // init_exti(&universal_step);
-    // printf("uni step = %ld\n", universal_step);
-
-    // init_all();
-    // printf("starting lcd\n");
-
-    // LCD_Setup();
-    // printf("setup\n");
-    // LCD_Clear(0x0);
-    // printf("clear\n");
-
-    // LCD_DrawFillRectangle(100, 100, 200, 200, 0x07E0);
-
-    // printf("drawn\n");
+    
     uint32_t universal_step = 0;
-
 
     while(1) {
         printf("Turning CW\n");
