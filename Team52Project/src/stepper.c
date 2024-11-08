@@ -131,10 +131,10 @@ void turn_CCW(uint32_t * step) {
                 break;
         }
         (*step)--;
-        printf("step = %ld\n", (*step));
+        printf("step (from stepper)= %ld\n", (*step));
         float distance = GetIrSensorDistanceInCm();
         printf("got distance = %d\n", (int)(distance));
-        calculate_and_display((&step), distance);
+        calculate_and_display((step), distance);
         printf("displayed success\n");
     }
 }

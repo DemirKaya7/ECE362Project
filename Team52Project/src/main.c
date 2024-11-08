@@ -45,7 +45,7 @@ int main(void) {
     internal_clock();
     IrSensor_Init();
 
-    autotest();
+    // autotest();
     setup_tim3();
 
     // init display
