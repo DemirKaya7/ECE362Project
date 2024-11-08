@@ -1,6 +1,6 @@
 #ifndef CALCULATIONS_H
 #define CALCULATIONS_H
 
-int getCurrentStep();
+void calculate_and_display(int *, float);
 
 #endif

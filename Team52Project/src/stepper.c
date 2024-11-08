@@ -71,7 +71,9 @@ void turn_CW(uint32_t * step) {
         // get IR data
         // convert distance to pixel
         float distance = GetIrSensorDistanceInCm();
-        calculate_and_display((&step,), distance);
+        printf("got distance = %d\n", (int)(distance));
+        calculate_and_display((&step), distance);
+        printf("displayed success\n");
         // display data
     }
 }
@@ -130,6 +132,10 @@ void turn_CCW(uint32_t * step) {
         }
         (*step)--;
         printf("step = %ld\n", (*step));
+        float distance = GetIrSensorDistanceInCm();
+        printf("got distance = %d\n", (int)(distance));
+        calculate_and_display((&step), distance);
+        printf("displayed success\n");
     }
 }
 

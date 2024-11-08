@@ -43,14 +43,19 @@ void init_all(void) {
 int main(void) {
     setup_serial();
     internal_clock();
-    // IrSensor_Init();
+    IrSensor_Init();
 
-    // autotest();
-    printf("setting up tim3\n");
+    autotest();
     setup_tim3();
 
-    
+    // init display
+    init_all();
+    LCD_Setup();
+    LCD_Clear(0x0);
+
     uint32_t universal_step = 0;
+
+    
 
     while(1) {
         printf("Turning CW\n");
