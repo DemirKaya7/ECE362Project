@@ -42,7 +42,7 @@ void init_all(void) {
 int main(void) {
     setup_serial();
     internal_clock();
-    // IrSensor_Init();
+    IrSensor_Init();
 
     // autotest();
     printf("setting up tim3\n");
@@ -56,24 +56,28 @@ int main(void) {
     // // init_exti(&universal_step);
     // printf("uni step = %ld\n", universal_step);
 
-    // init_all();
-    // printf("starting lcd\n");
+    init_all();
+    printf("starting lcd\n");
 
-    // LCD_Setup();
-    // printf("setup\n");
-    // LCD_Clear(0x0);
-    // printf("clear\n");
+    LCD_Setup();
+    printf("setup\n");
+    LCD_Clear(0x0);
+    printf("clear\n");
 
-    // LCD_DrawFillRectangle(100, 100, 200, 200, 0x07E0);
+    LCD_DrawFillRectangle(100, 0, 101, 1, 0x07E0);
 
-    // printf("drawn\n");
-    uint32_t universal_step = 0;
+    printf("drawn\n");
+    // uint32_t universal_step = 0;
 
+    printf("Start Sensor\n");
 
     while(1) {
-        printf("Turning CW\n");
-        turn_CW(&universal_step);
-        printf("Turning CCW\n");
-        turn_CCW(&universal_step);
+        // printf("Turning CW\n");
+        // turn_CW(&universal_step);
+        // printf("Turning CCW\n");
+        // turn_CCW(&universal_step);
+        StartSensorReading();
+        uint32_t adc = WaitForAdcSensorReading();
+        printf("%d\n", adc);
     }
 }
