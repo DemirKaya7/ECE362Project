@@ -11,8 +11,8 @@
 void calculate_and_display(int * step, float distance) {
     // 180 degrees = 1024 steps
     double step_in_degrees = conversion_rate * (1024 - (*step));
-    u16 x = (distance * sin(step_in_degrees) * 2);     // *2 for cm to pixel
-    u16 y = (distance * cos(step_in_degrees) * 2) + 160;     // *2 for cm to pixel
+    u16 x = (distance * sin(step_in_degrees) * 2.5);     // *2 for cm to pixel
+    u16 y = (distance * cos(step_in_degrees) * 2.5) + 160;     // *2 for cm to pixel
     u16 white = 0xFFFF;
     u16 black = 0x0000;
     // printf("SIN IN DEGREES = %d\n", (int)(100*sin(step_in_degrees)));
