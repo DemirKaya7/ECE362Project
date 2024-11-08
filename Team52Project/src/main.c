@@ -55,12 +55,12 @@ int main(void) {
 
     uint32_t universal_step = 0;
 
-    
+    u16 black = 0x0000;
 
     while(1) {
-        printf("Turning CW\n");
         turn_CW(&universal_step);
-        printf("Turning CCW\n");
+        LCD_Clear(black);
         turn_CCW(&universal_step);
+        LCD_Clear(black);
     }
 }

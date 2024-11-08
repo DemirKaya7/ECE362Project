@@ -12,7 +12,6 @@
 
 // write an ISR for button interrupt
 
-
 void turn_CW(uint32_t * step) {
     int i = 0;
     int j = 0;
@@ -62,19 +61,11 @@ void turn_CW(uint32_t * step) {
                     TIM3->CCR4 = CCRVAL;
                 }
                 l = 0;
-                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
                 break;
         }
         (*step)++;
-        printf("step = %ld\n", (*step));
-        ///////////////// calculation at every step
-        // get IR data
-        // convert distance to pixel
         float distance = GetIrSensorDistanceInCm();
-        printf("got distance = %d\n", (int)(distance));
-        calculate_and_display((&step), distance);
-        printf("displayed success\n");
-        // display data
+        calculate_and_display(step, distance);
     }
 }
 
@@ -94,7 +85,6 @@ void turn_CCW(uint32_t * step) {
                     TIM3->CCR4 = CCRVAL;
                 }
                 i = 0;
-                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
                 break;
 
             case 2:
@@ -105,7 +95,6 @@ void turn_CCW(uint32_t * step) {
                     TIM3->CCR4 = 0;
                 }
                 j = 0;
-                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
                 break;
 
             case 1:
@@ -116,7 +105,6 @@ void turn_CCW(uint32_t * step) {
                     TIM3->CCR4 = 0;
                 }
                 k = 0;
-                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
                 break;
 
             case 0:
@@ -127,15 +115,11 @@ void turn_CCW(uint32_t * step) {
                     TIM3->CCR4 = 0;
                 }
                 l = 0;
-                // printf("%d cm\n", (int)GetIrSensorDistanceInCm());
                 break;
         }
         (*step)--;
-        printf("step (from stepper)= %ld\n", (*step));
         float distance = GetIrSensorDistanceInCm();
-        printf("got distance = %d\n", (int)(distance));
-        calculate_and_display((step), distance);
-        printf("displayed success\n");
+        calculate_and_display(step, distance);
     }
 }
 
